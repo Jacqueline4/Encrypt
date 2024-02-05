@@ -15,7 +15,7 @@ public class Servidor {
 
     public static void main(String[] args) {
         Socket cliente;
-
+        //leer la clave 1 vez por fichero
         try (ServerSocket ss = new ServerSocket(6666)) {
             do {
                 cliente = ss.accept();

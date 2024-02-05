@@ -2,12 +2,9 @@ package entregablecripto.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
 
 public class Utils {
 
@@ -48,5 +45,11 @@ public class Utils {
         }
 
     }
-
+    
+    //Cifrar con clave simetrica (publica y privada).
+    //Descifrar con  con clave simetrica (publica y privada).4
+    //Cifrar clave publica
+    //Descifrar con clave publica
+    //Cifrar con clave privada
+    //Descifrar con clave privada
 }
