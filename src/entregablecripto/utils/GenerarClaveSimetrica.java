@@ -1,5 +1,6 @@
 package entregablecripto.utils;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +39,10 @@ public class GenerarClaveSimetrica implements Serializable {
     public GenerarClaveSimetrica() {
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    /**
+     *
+     */
+    public void generarClaveSimetrica(){
         ObjectOutputStream claveObj = null;
         File fichero = null;
         GenerarClaveSimetrica key = null;
@@ -53,24 +57,27 @@ public class GenerarClaveSimetrica implements Serializable {
             fichero = new File("miClave.key");
             claveObj = new ObjectOutputStream(new FileOutputStream(fichero));
             claveObj.writeObject(key);
-            System.out.println("Clave generada de tipo:" + key.getClave().getAlgorithm());
-            System.out.println("Clave format:" + key.getClave().getFormat());
-            System.out.println("Clave Encoded:" + key.getClave().getEncoded());
+//            System.out.println("Clave generada de tipo:" + key.getClave().getAlgorithm());
+//            System.out.println("Clave format:" + key.getClave().getFormat());
+//            System.out.println("Clave Encoded:" + key.getClave().getEncoded());
 
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } finally {
             try {
                 if (claveObj != null) {
                     claveObj.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
+             
             }
         }
 
     }
+    
+
+   
 
 }

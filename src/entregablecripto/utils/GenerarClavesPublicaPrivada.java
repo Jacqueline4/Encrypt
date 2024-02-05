@@ -52,7 +52,7 @@ public class GenerarClavesPublicaPrivada implements Serializable {
         this.publicKey = publicKey;
     }
 
-    public static void main(String[] args) {
+    public void generarClavePublicaPrivada() {
         ObjectOutputStream claveObj = null;
         File ficheroPub = null;
         File ficheroPriv = null;
@@ -73,16 +73,16 @@ public class GenerarClavesPublicaPrivada implements Serializable {
             ficheroPub = new File("miClavePublica.key");
             claveObj = new ObjectOutputStream(new FileOutputStream(ficheroPub));
             claveObj.writeObject(keyPublica);
-            System.out.println("Clave generada de tipo publica:" + keyPublica.getPublicKey().getAlgorithm());
-            System.out.println("Clave format:" + keyPublica.getPublicKey().getFormat());
-            System.out.println("Clave Encoded:" + keyPublica.getPublicKey().getEncoded());
+//            System.out.println("Clave generada de tipo publica:" + keyPublica.getPublicKey().getAlgorithm());
+//            System.out.println("Clave format:" + keyPublica.getPublicKey().getFormat());
+//            System.out.println("Clave Encoded:" + keyPublica.getPublicKey().getEncoded());
             claveObj.close();
             ficheroPriv = new File("miClavePrivada.key");
             claveObj = new ObjectOutputStream(new FileOutputStream(ficheroPriv));
             claveObj.writeObject(keyPrivada);
-            System.out.println("Clave generada de tipo privada:" + keyPublica.getPublicKey().getAlgorithm());
-            System.out.println("Clave format:" + keyPublica.getPublicKey().getFormat());
-            System.out.println("Clave Encoded:" + keyPublica.getPublicKey().getEncoded());
+//            System.out.println("Clave generada de tipo privada:" + keyPublica.getPublicKey().getAlgorithm());
+//            System.out.println("Clave format:" + keyPublica.getPublicKey().getFormat());
+//            System.out.println("Clave Encoded:" + keyPublica.getPublicKey().getEncoded());
 
         } catch (NoSuchAlgorithmException ex) {
             System.out.println(ex.getMessage() + "a");

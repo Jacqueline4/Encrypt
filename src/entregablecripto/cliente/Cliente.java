@@ -78,7 +78,7 @@ public class Cliente {
             if (ois != null) {
                 try {
                     ois.close();
-                } catch (IOException ex) {
+                    } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
