@@ -23,7 +23,7 @@ import javax.crypto.*;
  *
  * @author enrique
  */
-public class GenerarClave implements Serializable {
+public class GenerarClaveSimetrica implements Serializable {
 
     private SecretKey clave;
 
@@ -35,17 +35,17 @@ public class GenerarClave implements Serializable {
         this.clave = clave;
     }
 
-    public GenerarClave() {
+    public GenerarClaveSimetrica() {
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         ObjectOutputStream claveObj = null;
         File fichero = null;
-        GenerarClave key = null;
+        GenerarClaveSimetrica key = null;
         KeyGenerator keyGen;
 
         try {
-            key = new GenerarClave();
+            key = new GenerarClaveSimetrica();
 
             keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(128);
@@ -58,16 +58,16 @@ public class GenerarClave implements Serializable {
             System.out.println("Clave Encoded:" + key.getClave().getEncoded());
 
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(GenerarClave.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(GenerarClave.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (claveObj != null) {
                     claveObj.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(GenerarClave.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenerarClaveSimetrica.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
