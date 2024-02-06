@@ -55,7 +55,7 @@ public class Utils {
 
     }
 
-    public void cifrarSimetrico(File ficheroCifrar, File keyFichero, GenerarClaveSimetrica keyObj, ObjectInputStream clave) throws Exception {
+    public static  byte[] cifrarSimetrico(File ficheroCifrar, File keyFichero, GenerarClaveSimetrica keyObj, ObjectInputStream clave) throws Exception {
 
         FileOutputStream ficheroOut;
 
@@ -73,6 +73,7 @@ public class Utils {
             fichBytesCifrados = c.doFinal(fichBytes);
             grabarFichero(ficheroCifrar, fichBytesCifrados, "CifradoSimetrico_");
             System.out.println("Encriptado el fichero...:" + ficheroCifrar.getName());
+            return fichBytesCifrados;
 
         } catch (IOException ex) {
             System.out.println("Error I/O");
@@ -91,8 +92,59 @@ public class Utils {
         } catch (java.lang.IllegalArgumentException ex) {
 
         }
+        return null;
 
     }
+    
+    public static  byte[] descifrarSimetrico() {
+
+        File ficheroDescifrar;
+        File keyFichero = new File("miClave.key");
+        GenerarClave keyObj;
+
+        FileOutputStream ficheroOut;
+
+        ObjectInputStream clave;
+        byte[] fichBytes = null;
+        byte[] fichBytesCifrados = null;
+        if (args.length > 0) {
+            try {
+                ficheroDescifrar = new File(args[0]);
+                clave = new ObjectInputStream(new FileInputStream(keyFichero));
+                keyObj = (GenerarClave) clave.readObject();
+
+                // Cifrando byte[] con Cipher.
+                Cipher c = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                c.init(Cipher.DECRYPT_MODE, keyObj.getClave());
+                fichBytes = ficheroBytes(ficheroDescifrar);
+                fichBytesCifrados = c.doFinal(fichBytes);
+                grabarFicheroDescifrado(ficheroDescifrar, fichBytesCifrados);
+                System.out.println("Desencriptado el fichero...:" + ficheroDescifrar.getName());
+
+            } catch (IOException ex) {
+                System.out.println("Error I/O");
+            } catch (ClassNotFoundException ex) {
+                System.out.println(ex.getMessage());
+            } catch (InvalidKeyException ex) {
+                System.out.println("Clave no valida");
+            } catch (IllegalBlockSizeException ex) {
+                System.out.println(ex.getMessage());
+            } catch (BadPaddingException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NoSuchAlgorithmException ex) {
+                System.out.println(ex.getMessage());
+            } catch (NoSuchPaddingException ex) {
+                System.out.println(ex.getMessage());
+            } catch (java.lang.IllegalArgumentException ex) {
+
+            }
+
+        } else {
+            System.out.println("No se ha especificado archivo a descifrar.");
+        }
+
+    }
+
 
     public static void grabarFichero(File fichero, byte[] ficheroBytes, String tipo) {
 

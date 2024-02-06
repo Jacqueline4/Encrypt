@@ -5,6 +5,7 @@
 package entregablecripto.servidor;
 
 import entregablecripto.clase.FicheroEnvio;
+import entregablecripto.utils.GenerarClaveSimetrica;
 import entregablecripto.utils.Utils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,16 +20,25 @@ import java.net.Socket;
  * @author jacqueline
  */
 public class HiloServidor extends Thread {
-    
+
     Socket cliente;
-//    String name;
+    File file;
+    GenerarClaveSimetrica keyObj;
+    ObjectInputStream clave;
 
     public HiloServidor(Socket cliente) {
-        
+
         this.cliente = cliente;
-        
+
     }
-    
+
+    public HiloServidor(Socket cliente, File file, GenerarClaveSimetrica keyObj, ObjectInputStream clave) {
+        this.cliente = cliente;
+        this.file = file;
+        this.keyObj = keyObj;
+        this.clave = clave;
+    }
+
     public void run() {
         String ruta = "";
         ObjectInputStream ois = null;
@@ -37,7 +47,7 @@ public class HiloServidor extends Thread {
             do {
                 ois = new ObjectInputStream(cliente.getInputStream());
                 ruta = (String) ois.readObject();
-                
+
                 if (!ruta.equals("exit")) {
                     File file = new File(ruta);
                     FicheroEnvio fichero;
@@ -46,10 +56,12 @@ public class HiloServidor extends Thread {
                             fichero = new FicheroEnvio(Utils.fileToByteArray(ruta), 0);
                             byte[] contenido = fichero.getContenido();
                             System.out.println("Contenido: " + new String(contenido));
-                          
-                            fichero.setHash(Utils.GetHash(contenido));                      
+
+                            fichero.setHash(Utils.GetHash(contenido));
                             System.out.println("Mensaje hash: " + new String(fichero.getHash()));
-                            
+                            byte[] contenidoCifrado=Utils.cifrarSimetrico(file, this.file, keyObj, clave);
+                            fichero.setContenido(contenidoCifrado);
+                            //(File ficheroCifrar, File keyFichero, GenerarClaveSimetrica keyObj, ObjectInputStream clave
                         } else {
                             System.out.println("No se encontró el fichero");
                             fichero = new FicheroEnvio(null, 1);
@@ -60,10 +72,9 @@ public class HiloServidor extends Thread {
                     }
                     oos = new ObjectOutputStream(cliente.getOutputStream());
                     oos.writeObject(fichero);
-                   
-                    
+
                 }
-                
+
             } while (!ruta.equals("exit"));
 //            System.out.println("Cierre controlado del cliente);
 
@@ -85,7 +96,7 @@ public class HiloServidor extends Thread {
                     System.out.println("Error cierre oos");
                 }
             }
-            
+
         }
     }
 }
