@@ -43,15 +43,10 @@ public class Cliente {
 //                    File ficheroDescifrar= Utils.byteArrayToFile(ruta, byteArray)
 //                    Utils.descifrarSimetrico(fichero.getContenido());
                     if (fichero != null && fichero.getContenido() != null) {
-                        // Obtener el contenido
                         byte[] contenido = fichero.getContenido();
-
-                        // Utilizar el método descifrarSimetrico
                         try {
                             byte[] contenidoDescifrado = Utils.descifrarSimetrico(contenido);
-
-                            // Ahora puedes trabajar con el contenido descifrado como lo desees
-                            // Por ejemplo, escribirlo en un nuevo archivo
+                            fichero.setContenido(contenidoDescifrado);
                             String nuevoFileName = "descifrado.txt";
                             try (FileOutputStream fos = new FileOutputStream(new File(nuevoFileName))) {
                                 fos.write(contenidoDescifrado);
@@ -60,7 +55,7 @@ public class Cliente {
 //                        String content = new String(fichero.getContenido());
 //                        System.out.println("Contenido del archivo-> " + content + ", CodError-> " + fichero.getError());
                                     String rutaDestino = "C:\\FTP\\carpe\\" + fileName;
-                                    byte[] hashServ = Utils.GetHash(contenidoDescifrado);
+                                    byte[] hashServ = fichero.getHash();
                                     byte[] hashFichServ = Utils.GetHash(fichero.getContenido());
 //                        System.out.println(" hash del servidor-->" + hashFichServ);
 //                        System.out.println("Mensaje hash: " + new String(hashFichServ));
@@ -68,8 +63,8 @@ public class Cliente {
                                     String hashFichServStr = new String(hashFichServ);
                                     String hashServStr = new String(hashServ);
                                     
-                                    System.out.println("1"+ hashFichServStr);
-                                    System.out.println("2"+hashServStr);
+                                    System.out.println(hashFichServStr);
+                                    System.out.println(hashServStr);
                                     if (hashFichServStr.equalsIgnoreCase(hashServStr)) {
 
                                         Utils.byteArrayToFile(rutaDestino, fichero.getContenido());
