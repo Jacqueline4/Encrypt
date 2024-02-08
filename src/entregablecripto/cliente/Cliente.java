@@ -40,29 +40,24 @@ public class Cliente {
 
                     ois = new ObjectInputStream(s.getInputStream());
                     FicheroEnvio fichero = (FicheroEnvio) ois.readObject();
-//                    File ficheroDescifrar= Utils.byteArrayToFile(ruta, byteArray)
-//                    Utils.descifrarSimetrico(fichero.getContenido());
                     if (fichero != null && fichero.getContenido() != null) {
                         byte[] contenido = fichero.getContenido();
                         try {
-                            byte[] contenidoDescifrado = Utils.descifrarSimetrico(contenido);
+//                            byte[] contenidoDescifrado = Utils.descifrarSimetrico(contenido);//SIMETRICO
+                            byte[] contenidoDescifrado = Utils.descifrarPublicoPrivado(contenido);//PublicPrivate
                             fichero.setContenido(contenidoDescifrado);
                             String nuevoFileName = "descifrado.txt";
                             try (FileOutputStream fos = new FileOutputStream(new File(nuevoFileName))) {
                                 fos.write(contenidoDescifrado);
                                 System.out.println("Archivo descifrado creado con éxito: " + nuevoFileName);
                                 if (fichero.getError() == 0) {
-//                        String content = new String(fichero.getContenido());
-//                        System.out.println("Contenido del archivo-> " + content + ", CodError-> " + fichero.getError());
                                     String rutaDestino = "C:\\FTP\\carpe\\" + fileName;
                                     byte[] hashServ = fichero.getHash();
                                     byte[] hashFichServ = Utils.GetHash(fichero.getContenido());
-//                        System.out.println(" hash del servidor-->" + hashFichServ);
-//                        System.out.println("Mensaje hash: " + new String(hashFichServ));
 
                                     String hashFichServStr = new String(hashFichServ);
                                     String hashServStr = new String(hashServ);
-                                    
+
                                     System.out.println(hashFichServStr);
                                     System.out.println(hashServStr);
                                     if (hashFichServStr.equalsIgnoreCase(hashServStr)) {
