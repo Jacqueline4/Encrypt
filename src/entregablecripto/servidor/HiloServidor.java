@@ -2,11 +2,8 @@ package entregablecripto.servidor;
 
 import entregablecripto.clase.FicheroEnvio;
 import entregablecripto.utils.GenerarClaveSimetrica;
-import entregablecripto.utils.GenerarClavesPublicaPrivada;
 import entregablecripto.utils.Utils;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,27 +19,21 @@ public class HiloServidor extends Thread {
     File file;
     GenerarClaveSimetrica keyObj;
     ObjectInputStream clave;
-    GenerarClavesPublicaPrivada keyPP;
+   
 
-    public HiloServidor(Socket cliente) {
-
-        this.cliente = cliente;
-
-    }
-
-    public HiloServidor(Socket cliente, File file, ObjectInputStream clave, GenerarClavesPublicaPrivada keyPP) {
+    public HiloServidor(Socket cliente, File file) {
         this.cliente = cliente;
         this.file = file;
-        this.clave = clave;
-        this.keyPP = keyPP;
     }
-    
+
     public HiloServidor(Socket cliente, File file, GenerarClaveSimetrica keyObj, ObjectInputStream clave) {
         this.cliente = cliente;
         this.file = file;
         this.keyObj = keyObj;
         this.clave = clave;
     }
+
+   
 
     public void run() {
         String ruta = "";
@@ -54,9 +45,9 @@ public class HiloServidor extends Thread {
                 ruta = (String) ois.readObject();
 
                 if (!ruta.equals("exit")) {
-                    File file = new File(ruta);
+                    File ficheroDescargar = new File(ruta);
                     FicheroEnvio fichero;
-                    if (file.exists()) {
+                    if (ficheroDescargar.exists()) {
                         if (Utils.fileToByteArray(ruta) != null) {
                             fichero = new FicheroEnvio(Utils.fileToByteArray(ruta), 0);
                             byte[] contenido = fichero.getContenido();
@@ -65,12 +56,11 @@ public class HiloServidor extends Thread {
                             fichero.setHash(Utils.GetHash(contenido));
                             System.out.println("Mensaje hash: " + new String(fichero.getHash()));
                             //de la clave simetrica
-                            byte[] contenidoCifrado=Utils.cifrarSimetrico(file, this.file, keyObj, clave);
-                            //de las dos claves
-//                            byte[] contenidoCifrado=Utils.cifrarPublicoPrivado(file, this.file,clave ,keyPP);
+//                            byte[] contenidoCifrado=Utils.cifrarSimetrico(ficheroDescargar, this.file);
+                           
                           
-                            fichero.setContenido(contenidoCifrado);
-                            //(File ficheroCifrar, File keyFichero, GenerarClaveSimetrica keyObj, ObjectInputStream clave
+                            fichero.setContenido(Utils.cifrarSimetrico(ficheroDescargar, this.file));
+                          
                         } else {
                             System.out.println("No se encontró el fichero");
                             fichero = new FicheroEnvio(null, 1);
@@ -85,7 +75,7 @@ public class HiloServidor extends Thread {
                 }
 
             } while (!ruta.equals("exit"));
-//            System.out.println("Cierre controlado del cliente);
+
 
         } catch (Exception ex) {
 //            System.out.println(" Cierre abrupto del cliente ");

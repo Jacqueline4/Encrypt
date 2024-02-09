@@ -42,8 +42,8 @@ public class GenerarClaveSimetrica implements Serializable {
     /**
      *
      */
-    public void generarClaveSimetrica(){
-        ObjectOutputStream claveObj = null;
+    public static void main(String[] args) {
+       ObjectOutputStream claveObj = null;
         File fichero = null;
         GenerarClaveSimetrica key = null;
         KeyGenerator keyGen;
@@ -74,10 +74,9 @@ public class GenerarClaveSimetrica implements Serializable {
              
             }
         }
-
+                
+        
+        
     }
-    
-
-   
 
 }
