@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entregablecripto.servidor;
 
 import entregablecripto.clase.FicheroEnvio;
 import entregablecripto.utils.GenerarClaveSimetrica;
+import entregablecripto.utils.GenerarClavesPublicaPrivada;
 import entregablecripto.utils.Utils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +22,7 @@ public class HiloServidor extends Thread {
     File file;
     GenerarClaveSimetrica keyObj;
     ObjectInputStream clave;
+    GenerarClavesPublicaPrivada keyPP;
 
     public HiloServidor(Socket cliente) {
 
@@ -32,6 +30,13 @@ public class HiloServidor extends Thread {
 
     }
 
+    public HiloServidor(Socket cliente, File file, ObjectInputStream clave, GenerarClavesPublicaPrivada keyPP) {
+        this.cliente = cliente;
+        this.file = file;
+        this.clave = clave;
+        this.keyPP = keyPP;
+    }
+    
     public HiloServidor(Socket cliente, File file, GenerarClaveSimetrica keyObj, ObjectInputStream clave) {
         this.cliente = cliente;
         this.file = file;
@@ -59,7 +64,11 @@ public class HiloServidor extends Thread {
 
                             fichero.setHash(Utils.GetHash(contenido));
                             System.out.println("Mensaje hash: " + new String(fichero.getHash()));
+                            //de la clave simetrica
                             byte[] contenidoCifrado=Utils.cifrarSimetrico(file, this.file, keyObj, clave);
+                            //de las dos claves
+//                            byte[] contenidoCifrado=Utils.cifrarPublicoPrivado(file, this.file,clave ,keyPP);
+                          
                             fichero.setContenido(contenidoCifrado);
                             //(File ficheroCifrar, File keyFichero, GenerarClaveSimetrica keyObj, ObjectInputStream clave
                         } else {
